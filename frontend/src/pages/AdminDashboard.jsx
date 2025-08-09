@@ -1,89 +1,3 @@
-// import React, { useEffect, useState } from 'react'
-// import DashboardOveriew from '../component/Dashboard-component'
-// import { useAuth } from '../context/AppContext'
-// import AdminSidebar from '../component/Dashboard/AdminSidebar'
-// import Header from '../component/Header';
-// import { useLocation } from 'react-router-dom';
-// import RegisterEmployee from './RegisterEmployee';
-// import EmployeesList from './EmployeesList';
-// import Projects from './Projects';
-// import ProjectList from './ProjectList';
-// import InvoiceGenerator from './InvoiceGenerator';
-// import Department from './Department';
-// import DepartmentList from './DepartmentList';
-// import EditDepartment from './EditDepartment';
-// import InvoiceGenerateEmp from './InvoiceGenerateEmp';
-// import GstInvoiceGenerator from './GstInvoiceGenerator';
-// import Transactions from './TransactionPage/Transactions';
-
-
-// const AdminDashboard = () => {
-//   const{user}  = useAuth();
-//   const location= useLocation();
-//   const [tab, setTab]=useState('');
-
-//   useEffect(()=>{
-//     const urlParam = new URLSearchParams(location.search);
-//     const tabParam = urlParam.get('tab') || "admin-dashboard";
-
-//      if(tabParam){
-//         setTab(tabParam);
-//      }
-
-//   },[location.search]);
-  
-//   return (
-   
-//     <div className="bg-gray-50 min-h-screen ">
-//      <Header/>
-//      <hr />
-//      <div className='flex w-full '>
-//       <AdminSidebar/>
-
-//       <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
-//        {/* Admin Dashboard */}
-//        {tab ==="admin-dashboard" && <DashboardOveriew/>}
-//        {/* Employee */}
-//        {tab === "register" && <RegisterEmployee/>}
-//        {tab === "employees" && <EmployeesList/>}
-//        {tab === "add-department" && <Department/>}
-//        {tab === "department-list" && <DepartmentList/>}
-//        {tab === "edit-department" && <EditDepartment/>}
-
-       
-
-
-//        {/* Project */}
-//        {tab === "addProject" && <Projects/>}
-//        {tab === "projects" && <ProjectList/>}
-
-//        {tab=== "invoice"  && <InvoiceGenerator/>}
-//        {tab=== "proforma-invoice"  && <InvoiceGenerateEmp/>}
-//        {tab=== "gst-invoice" && <GstInvoiceGenerator/>}
-
-//         {/* Transaction */}
-
-//         {tab === "transactions" && <Transactions/>}
-
-
-
-
-//      </div>
-//      </div>
-    
-
-//     </div>
-
-
-   
-
-//   )
-// }
-
-// export default AdminDashboard
-
-
-
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AppContext';
 import { useLocation } from 'react-router-dom';
@@ -94,6 +8,7 @@ import DashboardOverview from '../component/Dashboard-component';
 
 import RegisterEmployee from './RegisterEmployee';
 import EmployeesList from './EmployeesList';
+import EditEmployee from './EditEmployee';
 import Projects from './Projects';
 import ProjectList from './ProjectList';
 import InvoiceGenerator from './InvoiceGenerator';
@@ -108,11 +23,15 @@ const AdminDashboard = () => {
   const { user } = useAuth();
   const location = useLocation();
   const [tab, setTab] = useState('');
+  const [employeeId, setEmployeeId] = useState(null);
 
   useEffect(() => {
     const urlParam = new URLSearchParams(location.search);
     const tabParam = urlParam.get('tab') || 'admin-dashboard';
+    const idParam = urlParam.get('id');
+    
     setTab(tabParam);
+    setEmployeeId(idParam);
   }, [location.search]);
 
   const renderTab = () => {
@@ -123,6 +42,8 @@ const AdminDashboard = () => {
         return <RegisterEmployee />;
       case 'employees':
         return <EmployeesList />;
+      case 'edit-employee':
+        return employeeId ? <EditEmployee id={employeeId} /> : <div className="p-4 text-red-600">Employee ID is required for editing</div>;
       case 'add-department':
         return <Department />;
       case 'department-list':
@@ -153,22 +74,19 @@ const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Sidebar */}
-      
-        
-    <AdminSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-       
-      
+      <AdminSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
       {/* Content */}
-     <div className={`flex flex-col flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}>
+      <div className={`flex flex-col flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'ml-72' : 'ml-20'}`}>
         <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
-        <hr />
-        <main className="flex-1 overflow-auto p-6 text-gray-700">
-          {renderTab()}
-        </main>
+        <div className="flex-1 overflow-auto p-6">
+          <div className="max-w-7xl mx-auto">
+            {renderTab()}
+          </div>
+        </div>
       </div>
     </div>
   );

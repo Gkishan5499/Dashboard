@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify'
 import Login from './pages/Login'
 import RegisterEmployee from './pages/RegisterEmployee'
 import EmployeesList from './pages/EmployeesList'
+import EditEmployee from './pages/EditEmployee'
 import Profile from './pages/Profile'
 
 import Projects from './pages/Projects'
@@ -51,21 +52,19 @@ const App = () => {
                     <Route path="/department-list" element={<DepartmentList/>}/>
                     <Route path="/edit-department" element={<EditDepartment/>}/>
 
-
                     <Route path="/register" element={<RegisterEmployee/>}/>
                     <Route path="/addProject" element={<Projects/>}/>
                     <Route path="/projects" element={<ProjectList/>}/>
                     <Route path="/invoice" element={<InvoiceGenerator/>}/>
 
-
-                     <Route path= "/transactions" element={<Transactions/>}/>
-                    
+                    <Route path= "/transactions" element={<Transactions/>}/>
                     
                     <Route path="/employees" element={<EmployeesList />}/>
                     <Route path="/employees/profile/:id" element={<Profile/>}/>
+                    <Route path="/employees/edit/:id" element={<EditEmployee/>}/>
 
                   </Routes>
-             
+            
 
     </BrowserRouter>
 
